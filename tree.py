@@ -7,16 +7,18 @@ Node = nd.Node
 
 class Tree:
 
-	def __init__(self) -> None:
+	def __init__(self, palette: dict, max_nodes: int) -> None:
+		self.palette = palette
+		self.max_nodes = max_nodes
 		self.age = 0
 		self.rect = pygame.Rect(0, 0, cts.tree_surface_width, cts.tree_surface_height)
 		self.branches = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 		self.leaves = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 		self.surface = pygame.Surface(self.rect.size, pygame.SRCALPHA)
-		self.root = Node(self.age, cts.start_branch_len, cts.start_branch_angle)
+		self.root = Node(self.age, cts.start_branch_len, cts.start_branch_angle, self.palette)
 
 	def grow(self):
-		if (nd.count(self.root) < cts.tree_max_nodes):
+		if (nd.count(self.root) < self.max_nodes):
 			self.age += 1
 			grow_node = nd.youngest(self.root)[1]
 			grow_node.grow(self.age)
@@ -38,16 +40,19 @@ class Tree:
 		# Draw branches and leaves onto respective surfaces
 		nd.draw_branches(self.root, cts.tree_base_pos, self.branches)
 		nd.draw_leaves(self.root, cts.tree_base_pos, self.leaves)
-		leaves = pixellate_and_outline(self.leaves, cts.leaves_outline)
+		leaves = pixellate_and_outline(self.leaves, self.palette["leaves_outline"])
 
 		# Draw shadow, then branches, then leaves to final surface
-		shadow_pos, shadow_surf = shadow(leaves, cts.shadow_color)
+		shadow_pos, shadow_surf = shadow(leaves, self.palette["shadow_color"])
 		self.surface.blit(pixellate(shadow_surf), (0, (cts.shadow_base - (shadow_pos[1] // cts.leaves_shadow_ratio))))
-		self.surface.blit(pixellate_and_outline(self.branches, cts.trunk_outline), (0, 0))
+		self.surface.blit(pixellate_and_outline(self.branches, self.palette["trunk_outline"]), (0, 0))
 		self.surface.blit(leaves, (0, 0))
 
 	def draw(self, surface: pygame.Surface, pos: tuple):
 		surface.blit(self.surface, pos)
+
+	def change_color(self, new_palette: dict):
+		nd.change_palette(self.root, new_palette)
 
 
 

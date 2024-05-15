@@ -1,4 +1,5 @@
 import pygame
+import palette
 from tree import Tree
 
 
@@ -6,7 +7,7 @@ pygame.init()
 window = pygame.display.set_mode((1280, 720))
 
 
-tree = Tree()
+tree = Tree(palette.load_palette("cherry"), 50)
 
 
 while True:
@@ -27,9 +28,6 @@ while True:
 		if event.type == pygame.QUIT:
 			quit()
 		elif (event.type == pygame.MOUSEBUTTONDOWN):
-			tree0 = Tree()
-			tree1 = Tree()
-			tree2 = Tree()
-
+			tree.change_color(palette.load_palette("autumn"))
 
 

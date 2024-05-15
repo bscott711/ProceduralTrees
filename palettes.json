@@ -6,7 +6,8 @@
         "leaves_outline": [68, 94, 52, 255],
         "trunk0": [133, 94, 41, 255],
         "trunk1": [102, 68, 20, 255],
-        "trunk_outline": [79, 58, 28, 255]
+        "trunk_outline": [79, 58, 28, 255],
+        "shadow_color": [0, 0, 0, 100]
     },
     "autumn": {
         "leaves0": [232, 177, 12, 255],
@@ -15,7 +16,8 @@
         "leaves_outline": [200, 47, 49, 255],
         "trunk0": [133, 94, 41, 255],
         "trunk1": [102, 68, 20, 255],
-        "trunk_outline": [79, 58, 28, 255]
+        "trunk_outline": [79, 58, 28, 255],
+        "shadow_color": [0, 0, 0, 100]
     },
     "cherry": {
         "leaves0": [255, 194, 205, 255],
@@ -24,6 +26,7 @@
         "leaves_outline": [255, 8, 74, 255],
         "trunk0": [133, 94, 41, 255],
         "trunk1": [102, 68, 20, 255],
-        "trunk_outline": [79, 58, 28, 255]
+        "trunk_outline": [79, 58, 28, 255],
+        "shadow_color": [0, 0, 0, 100]
     }
 }
