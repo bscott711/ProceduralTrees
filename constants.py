@@ -34,22 +34,3 @@ bend_age_change = -3
 grow_age_change = 12
 grow_length_change = 2
 
-
-
-
-
-
-
-
-
-# Cherry blossoms
-# green0 = (255, 194, 205)
-# green1 = (245, 147, 172)
-# green2 = (235, 98, 137)
-# leaves_outline = pygame.Color(255, 8, 74, 255)
-
-# Fall colors
-# green0 = (232, 177, 12)
-# green1 = (245, 149, 57)
-# green2 = (218, 64, 27)
-# leaves_outline = pygame.Color(200, 47, 49, 255)

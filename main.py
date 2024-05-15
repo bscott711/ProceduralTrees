@@ -3,23 +3,22 @@ from tree import Tree
 
 
 pygame.init()
-window = pygame.display.set_mode((1080, 720))
+window = pygame.display.set_mode((1280, 720))
 
 
-tree0 = Tree()
-tree1 = Tree()
-tree2 = Tree()
+tree = Tree()
 
 
 while True:
-	tree0.grow()
-	tree1.grow()
-	tree2.grow()
+	tree.grow()
 
 	window.fill((130, 170, 70))
-	tree0.draw(window, (0, 200))
-	tree1.draw(window, (360, 200))
-	tree2.draw(window, (720, 200))
+	tree.draw(window, (635, 200))
+
+	# Side panel
+	pygame.draw.rect(window, (120, 125, 130), (0, 0, 350, 720))
+	# Button
+	pygame.draw.rect(window, (50, 55, 60), (15, 15, 320, 40))
 	
 	pygame.display.flip()
 
