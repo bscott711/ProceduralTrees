@@ -1,11 +1,8 @@
 import pygame
 import math
 import random
-from leaf import Leaf
-
-
-brown0 = (133, 94, 41)
-brown1 = (102, 68, 20)
+import constants as cts
+from leaf import random_leaves
 
 
 class Node:
@@ -16,29 +13,33 @@ class Node:
 		self.angle = angle
 		self.left = None
 		self.right = None
-		self.leaves = Leaf(age)
+		self.leaves = random_leaves()
 
 	def add_left(self, age) -> None:
-		self.left = Node(age * 2, max(random.randint(15, 40) - age, 12), random.randint(95, 110))
+		length = max(random.randint(cts.min_length, cts.max_length) - age, cts.min_length)
+		angle = random.randint(cts.min_angle_left, cts.max_angle_left)
+		self.left = Node(age * 2, length, angle)
 
 	def add_right(self, age) -> None:
-		self.right = Node(age * 2, max(random.randint(15, 40) - age, 12), random.randint(70, 85))
+		length = max(random.randint(cts.min_length, cts.max_length) - age, cts.min_length)
+		angle = random.randint(cts.min_angle_right, cts.max_angle_right)
+		self.right = Node(age * 2, length, angle)
 
 	def grow(self, age) -> None:
 		number = random.randint(1, 3)
 		if (number == 1 and self.left == None): self.add_left(age)
 		elif (number == 2 and self.right == None): self.add_right(age)
 		else:
-			self.length += 2
-			self.age += 13
+			self.length += cts.grow_length_change
+			self.age += cts.grow_age_change
 
 	def bend(self, angle_incremeent: float):
-		if self.angle > 140 or self.angle < 40:
+		if self.angle > cts.max_angle_left or self.angle < cts.min_angle_right:
 			return
 		self.angle += angle_incremeent
-		self.age -= 3
-		if self.left != None: self.left.age -= 3
-		if self.right != None: self.right.age -= 3
+		self.age += cts.bend_age_change
+		if self.left != None: self.left.age += cts.bend_age_change
+		if self.right != None: self.right.age += cts.bend_age_change
 
 
 # Node functions
@@ -75,11 +76,7 @@ def draw_parallel_lines(start, stop, perp_angle, width, window): # Perp angle ne
 	for i in range(round(-width / 2), round(width / 2) + 1, 1):
 		new_start = (start[0] + (i * math.cos(perp_angle)), start[1] + (-i * math.sin(perp_angle)) - (abs(i)**(2/3)))
 		new_stop = (stop[0] + (i * math.cos(perp_angle)), stop[1] + (-i * math.sin(perp_angle)) + (abs(i)**(2/3)))
-		
-		if i < -1:
-			brown = brown1
-		else:
-			brown = brown0
+		brown = cts.brown1 if i < -1 else cts.brown0
 		pygame.draw.line(window, brown, new_start, new_stop, 3)
 
 
@@ -91,11 +88,12 @@ def draw_branches(node: Node, start: tuple[float, float], window: pygame.Surface
 	if (node == None):
 		return
 	pos = get_position(start, node.length, math.radians(node.angle))
-	width = count(node)**(3/4)
+	width = count(node)**cts.trunk_width_power
 
-	pygame.draw.circle(window, brown0, pos, width * 0.6) # This brown circle colors in gaps between braches that are very bent
+	pygame.draw.circle(window, cts.brown0, pos, width * 0.6) # This brown circle colors in gaps between braches that are very bent
 	draw_parallel_lines(start, pos, math.radians(node.angle + 90), width, window) # Draws the branch for each node
 	# pygame.draw.line(window, (255, 255, 255), start, pos, 2) # Skeleton of the tree for testing purposes
+	# pygame.draw.circle(window, (255, 255, 255), pos, 6, 2)
 	draw_branches(node.left, pos, window) # Recursively draws node's left and right children
 	draw_branches(node.right, pos, window)
 
@@ -104,11 +102,11 @@ def draw_leaves(node: Node, start: tuple[float, float], window: pygame.Surface) 
 	if (node == None):
 		return
 	pos = get_position(start, node.length, math.radians(node.angle))
+	top_left_pos = (pos[0] - cts.leaf_surface_width / 2, pos[1] - cts.leaf_surface_height / 2)
 
-	if (count(node) < 6): window.blit(node.leaves, (pos[0] - 32, pos[1] - 32)) # If the node has < 10 children draw leaves
-	draw_leaves(node.left, pos, window) # Recursively draws node's left and right children
+	if (count(node) < cts.children_for_leaves): window.blit(node.leaves, top_left_pos) # If the node has few enough children draw leaves
+	draw_leaves(node.left, pos, window) # Recursively draws node's left and right children's leaves
 	draw_leaves(node.right, pos, window)
-	if (count(node) < 4): window.blit(node.leaves, (pos[0] - 32, pos[1] - 32)) # If the node is extremely close to the edge, it also draws leaves on top
 		
 
 def random_child(node: Node) -> Node: # Picks a random node from the children of a root

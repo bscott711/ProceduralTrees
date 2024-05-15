@@ -1,5 +1,6 @@
 import pygame
 import node as nd
+import constants as cts
 
 Node = nd.Node
 
@@ -8,14 +9,14 @@ class Tree:
 
 	def __init__(self) -> None:
 		self.age = 0
-		self.rect = pygame.Rect(0, 0, 360, 460)
+		self.rect = pygame.Rect(0, 0, cts.tree_surface_width, cts.tree_surface_height)
 		self.branches = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 		self.leaves = pygame.Surface(self.rect.size, pygame.SRCALPHA)
 		self.surface = pygame.Surface(self.rect.size, pygame.SRCALPHA)
-		self.root = Node(self.age, 26, 90)
+		self.root = Node(self.age, cts.start_branch_len, cts.start_branch_angle)
 
 	def grow(self):
-		if (nd.count(self.root) < 50):
+		if (nd.count(self.root) < cts.tree_max_nodes):
 			self.age += 1
 			grow_node = nd.youngest(self.root)[1]
 			grow_node.grow(self.age)
@@ -35,14 +36,14 @@ class Tree:
 		self.leaves.fill((0, 0, 0, 0))
 
 		# Draw branches and leaves onto respective surfaces
-		nd.draw_branches(self.root, (180, 430), self.branches)
-		nd.draw_leaves(self.root, (180, 430), self.leaves)
-		leaves = pixellate_and_outline(self.leaves, pygame.Color(68, 94, 52, 255))
+		nd.draw_branches(self.root, cts.tree_base_pos, self.branches)
+		nd.draw_leaves(self.root, cts.tree_base_pos, self.leaves)
+		leaves = pixellate_and_outline(self.leaves, cts.leaves_outline)
 
 		# Draw shadow, then branches, then leaves to final surface
-		shadow_pos, shadow_surf = shadow(leaves, pygame.Color(0, 0, 0, 100))
-		self.surface.blit(pixellate(shadow_surf), (0, (400 - (shadow_pos[1] // 1.6))))
-		self.surface.blit(pixellate_and_outline(self.branches, pygame.Color(79, 58, 28, 255)), (0, 0))
+		shadow_pos, shadow_surf = shadow(leaves, cts.shadow_color)
+		self.surface.blit(pixellate(shadow_surf), (0, (cts.shadow_base - (shadow_pos[1] // cts.leaves_shadow_ratio))))
+		self.surface.blit(pixellate_and_outline(self.branches, cts.trunk_outline), (0, 0))
 		self.surface.blit(leaves, (0, 0))
 
 	def draw(self, surface: pygame.Surface, pos: tuple):
@@ -51,7 +52,7 @@ class Tree:
 
 
 
-# Tree and tree drawing functions
+# Tree and surface functions
 def pixellate(surface: pygame.Surface) -> pygame.Surface:
 	width, height = surface.get_size()
 	small = pygame.transform.scale(surface, (width // 4, height // 4))
@@ -65,6 +66,7 @@ def pixellate_and_outline(surface: pygame.Surface, color: pygame.Color) -> pygam
 	return pygame.transform.scale(outlined, (width, height))
 
 
+# I have no clue why the mask has to be cropped slightly but just trust me
 def outline(surface: pygame.Surface, color: pygame.Color) -> pygame.Surface:
 	outline = pygame.mask.from_surface(surface)
 	outline_size = outline.get_size()
@@ -82,4 +84,4 @@ def outline(surface: pygame.Surface, color: pygame.Color) -> pygame.Surface:
 def shadow(surface: pygame.Surface, color: pygame.Color) -> tuple[tuple[int, int], pygame.Surface]: # Returns the center of the shadow and the shadow
 	mask = pygame.mask.from_surface(surface)
 	shadow = mask.to_surface(setcolor=color, unsetcolor=(0, 0, 0, 0))
-	return (mask.centroid(), pygame.transform.scale(shadow, (shadow.get_width(), shadow.get_height() / 1.6)))
+	return (mask.centroid(), pygame.transform.scale(shadow, (shadow.get_width(), shadow.get_height() / cts.leaves_shadow_ratio)))
