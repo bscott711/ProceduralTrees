@@ -1,16 +1,14 @@
-import pygame
-
 
 trunk_width_power = 3 / 4
-leaves_density = [1, 2, 3]
+leaves_density = [1, 2, 2]
 leaves_shadow_ratio = 1.5
 children_for_leaves = 6
 
 leaf_surface_width = 64
 leaf_surface_height = 64
-tree_surface_width = 360
-tree_surface_height = 460
-tree_base_pos = (tree_surface_width / 2, tree_surface_height - 30)
+tree_surface_width = 400
+tree_surface_height = 600
+tree_base_pos = (tree_surface_width / 2, tree_surface_height - 100)
 shadow_base = tree_base_pos[1] - 30
 
 start_branch_len = 30
