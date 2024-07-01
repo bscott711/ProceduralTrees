@@ -1,0 +1,13 @@
+# Virtual environments
+venv/
+env/
+
+# Compiled Python files
+*.pyc
+
+# IDE or editor-specific files
+.vscode/
+.idea/
+
+# Ignore local settings
+config.ini
