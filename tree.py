@@ -28,8 +28,12 @@ class Tree:
 					bend_node.left.bend(1)
 				else:
 					bend_node.right.bend(-1)
-
+			
+			self.update_surfaces()
+			return True
+		
 		self.update_surfaces()
+		return False
 
 	def update_surfaces(self):
 		# Clear and make sure surfaces can be transparent

@@ -1,4 +1,4 @@
-import pygame
+import pygame, cv2, numpy as np
 from palette import load_palette
 from tree import Tree
 
@@ -25,9 +25,17 @@ new_tree_button_rect = pygame.Rect(20, 20, 100, 50)
 save_button_surf = button(100, 50, "Save")
 save_button_rect = pygame.Rect(140, 20, 100, 50)
 
+images = []
+image = pygame.Surface(tree.surface.size, pygame.SRCALPHA)
+image.fill((130, 170, 70, 255))
+video_fps = 60
+
 
 while True:
-	tree.grow()
+	if tree.grow():
+		new_image = image.copy()
+		new_image.blit(tree.surface, (0, 0))
+		images.append(pygame.surfarray.array3d(new_image))
 	window.fill((130, 170, 70))
 	tree.draw(window, (0, 0))
 	window.blit(new_tree_button_surf, new_tree_button_rect)
@@ -41,12 +49,24 @@ while True:
 		elif (event.type == pygame.MOUSEBUTTONDOWN):
 			if new_tree_button_rect.collidepoint(event.pos):
 				tree = Tree(palette, 50)
+				images = []
 				print("generating new tree")
 			elif save_button_rect.collidepoint(event.pos):
-				image = pygame.Surface(tree.surface.size, pygame.SRCALPHA)
-				image.fill((130, 170, 70, 255))
-				image.blit(tree.surface, (0, 0))
-				pygame.image.save(image,'tree.png')
-				print("saved", tree.surface.size)
+				new_image = image.copy()
+				new_image.blit(tree.surface, (0, 0))
+				pygame.image.save(new_image,'tree.png')
+				print("Image saved as tree.png")
+
+				fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+				video_writer = cv2.VideoWriter("video.mp4", fourcc, video_fps, tree.surface.size)
+
+				# Iterate through each surface and write it to the video
+				for frame in images:
+					frame = np.transpose(frame, (1, 0, 2))  # Pygame surface is transposed
+					frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+					video_writer.write(frame)
+
+				video_writer.release()
+				print(f"Video saved as video.mp4")
 
 
