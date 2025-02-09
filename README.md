@@ -8,6 +8,8 @@ To use this tool just extract the zip file , make sure you have python installed
 
 Thanks for checking out the project! I hope you like it and I hope you find it useful or just fun to watch :)
 
+Itch.io: https://4b3c.itch.io/procedural-pixel-art-tree-generator
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b7f69ecd-9837-4421-988a-b14938c60c5c" alt="Tree 1" width="400" />
   <img src="https://github.com/user-attachments/assets/6954c0db-e41c-4001-a593-0c7796c81017" alt="Tree 2" width="400" />
