@@ -1,4 +1,6 @@
-import pygame, cv2, numpy as np
+import pygame
+import cv2
+import numpy as np
 from palette import load_palette
 from tree import Tree
 
@@ -67,6 +69,6 @@ while True:
 					video_writer.write(frame)
 
 				video_writer.release()
-				print(f"Video saved as video.mp4")
+				print("Video saved as video.mp4")
 
 

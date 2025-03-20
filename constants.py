@@ -1,4 +1,3 @@
-
 trunk_width_power = 3 / 4
 leaves_density = [1, 2, 2]
 leaves_shadow_ratio = 1.5
@@ -23,4 +22,3 @@ max_angle_right = 80
 bend_age_change = -3
 grow_age_change = 12
 grow_length_change = 2
-

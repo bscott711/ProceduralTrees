@@ -1,0 +1,12 @@
+[project]
+name = "procedural-tree"
+version = "0.1.0"
+description = "A procedural tree generator forked from 4b3c/procedural-tree"
+
+dependencies = [
+    "pygame-ce",
+    "opencv-python",
+    "numpy"
+]
+
+requires-python = ">=3.8"
